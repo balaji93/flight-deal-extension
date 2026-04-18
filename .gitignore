@@ -1,0 +1,12 @@
+# API keys — never commit real credentials
+src/config.js
+
+# macOS
+.DS_Store
+
+# Editor directories
+.vscode/
+.idea/
+
+# Node (if ever added)
+node_modules/

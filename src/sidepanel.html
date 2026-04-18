@@ -27,11 +27,23 @@
           </div>
         </div>
 
+        <div class="trip-type-toggle">
+          <button class="trip-btn active" id="btn-oneway" data-type="oneway">One Way</button>
+          <button class="trip-btn" id="btn-roundtrip" data-type="roundtrip">Round Trip</button>
+        </div>
+
         <div class="row">
           <div class="input-group">
-            <label for="date">Travel Date</label>
+            <label for="date">Departure Date</label>
             <input type="date" id="date">
           </div>
+          <div class="input-group" id="return-date-group" class="disabled-group">
+            <label for="return-date">Return Date</label>
+            <input type="date" id="return-date" disabled>
+          </div>
+        </div>
+
+        <div class="row">
           <div class="input-group">
             <label for="passengers">Passengers</label>
             <input type="number" id="passengers" value="1" min="1">
@@ -54,7 +66,18 @@
         <p>Crawling 12+ sites for live deals...</p>
       </div>
 
-      <section id="results" class="results-container hidden">
+      <!-- ── Tab bar (hidden until results arrive) ─────────────────── -->
+      <div id="result-tabs" class="tab-bar hidden">
+        <button class="tab-btn active" id="tab-deals" data-panel="panel-deals">
+          🏆 Top Deals
+        </button>
+        <button class="tab-btn" id="tab-itinerary" data-panel="panel-itinerary">
+          <span class="ai-star">✦</span> Itinerary
+        </button>
+      </div>
+
+      <!-- ── Panel: Top Ranked Deals ───────────────────────────────── -->
+      <section id="panel-deals" class="tab-panel results-container hidden">
         <div class="rank-header">
           <h2>Top Ranked Deals</h2>
           <span class="badge">Accurate Pricing</span>
@@ -71,6 +94,26 @@
           </div>
         </div>
       </section>
+
+      <!-- ── Panel: AI Itinerary ────────────────────────────────────── -->
+      <section id="panel-itinerary" class="tab-panel hidden">
+        <!-- Loader shown while Gemini is generating -->
+        <div id="itinerary-loader" class="hidden">
+          <div class="ai-spinner-wrap">
+            <span class="ai-spinner-star">✦</span>
+          </div>
+          <p class="ai-loader-text">Generating AI recommended tour itinerary…</p>
+        </div>
+
+        <!-- Rendered itinerary content -->
+        <div id="itinerary-content" class="itinerary-content hidden"></div>
+
+        <!-- Placeholder shown before first generation -->
+        <div id="itinerary-placeholder" class="itinerary-placeholder">
+          <span class="ai-star-lg">✦</span>
+          <p>Your AI-curated itinerary will appear here.<br>Click this tab after searching to generate it.</p>
+        </div>
+      </section>
     </main>
 
     <datalist id="cities">
@@ -82,6 +125,9 @@
       <option value="CCU">Kolkata</option>
       <option value="AMD">Ahmedabad</option>
       <option value="PNQ">Pune</option>
+      <option value="GOI">Goa</option>
+      <option value="JAI">Jaipur</option>
+      <option value="COK">Kochi</option>
     </datalist>
 
     <footer>

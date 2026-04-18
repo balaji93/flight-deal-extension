@@ -10,6 +10,8 @@
   --warning: #f59e0b;
   --glass: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
+  --ai-gold: #f9a825;
+  --ai-purple: #a855f7;
 }
 
 * {
@@ -65,6 +67,61 @@ header p {
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
   align-items: flex-end;
+}
+
+/* Prevent grid children from overflowing their 1fr column */
+.row > * {
+  min-width: 0;
+  overflow: hidden;
+}
+
+input[type="date"] {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* ── Trip type toggle ─────────────────────────────────────────── */
+.trip-type-toggle {
+  display: flex;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.trip-btn {
+  flex: 1;
+  padding: 0.55rem 0;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.trip-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+}
+
+.trip-btn:not(.active):hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+}
+
+/* ── Disabled (greyed-out) return date group ──────────────────── */
+.disabled-group label {
+  opacity: 0.35;
+}
+
+.disabled-group input {
+  opacity: 0.25;
+  cursor: not-allowed;
+  color: var(--text-dim);
 }
 
 .input-group {
@@ -152,6 +209,234 @@ input:focus {
 
 .primary-btn:active {
   transform: scale(0.98);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TAB BAR
+══════════════════════════════════════════════════════════════ */
+.tab-bar {
+  display: flex;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-top: 0.25rem;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.65rem 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+}
+
+.tab-btn.active .ai-star {
+  background: linear-gradient(135deg, #fff, #e0c3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tab-btn:not(.active):hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+}
+
+/* ── AI star symbol ────────────────────────────────────────────── */
+.ai-star {
+  background: linear-gradient(135deg, var(--ai-gold), var(--ai-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 0.95rem;
+  animation: starGlow 3s ease-in-out infinite alternate;
+  display: inline-block;
+}
+
+.ai-star-lg {
+  background: linear-gradient(135deg, var(--ai-gold), var(--ai-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2.5rem;
+  animation: starGlow 3s ease-in-out infinite alternate;
+  display: inline-block;
+}
+
+@keyframes starGlow {
+  0%   { filter: drop-shadow(0 0 4px rgba(249,168,37,0.5)); }
+  100% { filter: drop-shadow(0 0 10px rgba(168,85,247,0.7)); }
+}
+
+/* ── Tab panels ────────────────────────────────────────────────── */
+.tab-panel {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ITINERARY PANEL
+══════════════════════════════════════════════════════════════ */
+
+/* Loader */
+#itinerary-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 1rem;
+}
+
+.ai-spinner-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Rotating outer ring */
+.ai-spinner-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: var(--ai-gold);
+  border-right-color: var(--ai-purple);
+  animation: spin 1.2s linear infinite;
+}
+
+.ai-spinner-star {
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--ai-gold), var(--ai-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: starPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes starPulse {
+  0%   { transform: scale(0.85); opacity: 0.7; }
+  100% { transform: scale(1.1);  opacity: 1;   }
+}
+
+.ai-loader-text {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  text-align: center;
+  letter-spacing: 0.01em;
+  font-style: italic;
+}
+
+/* Placeholder (first open, before generation) */
+.itinerary-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+/* Rendered itinerary content */
+.itinerary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.itinerary-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.day-block {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-left: 3px solid;
+  border-image: linear-gradient(180deg, var(--ai-gold), var(--ai-purple)) 1;
+  border-radius: 0 0.625rem 0.625rem 0;
+  padding: 0.75rem 0.875rem;
+  animation: fadeIn 0.3s ease both;
+}
+
+.day-block-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.day-block ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.day-block li {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.day-block li::before {
+  content: '•';
+  color: var(--ai-gold);
+  flex-shrink: 0;
+}
+
+/* Time chip inside a day bullet */
+.time-chip {
+  font-family: monospace;
+  font-size: 0.7rem;
+  background: rgba(249,168,37,0.1);
+  color: var(--ai-gold);
+  border-radius: 0.25rem;
+  padding: 0 0.3rem;
+  flex-shrink: 0;
+}
+
+.itinerary-note {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 0.25rem 0 0.5rem;
+  font-style: italic;
 }
 
 /* Results */
@@ -371,4 +656,11 @@ input:focus {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+#loading {
+  text-align: center;
+  padding-bottom: 1rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
 }
